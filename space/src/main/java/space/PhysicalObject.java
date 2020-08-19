@@ -6,6 +6,7 @@ import static java.lang.Math.sqrt;
 
 public class PhysicalObject {
 
+    public static final double EARTH_WEIGHT = 5.9736e24;
     public static double seconds = 1;
     public double mass;
     public double x;
@@ -140,7 +141,7 @@ public class PhysicalObject {
 
     private void paintBouncingBall(Graphics2D graphics, double centrex, double scale, Dimension size, double centrey) {
         graphics.setColor(weightToColor(mass));
-        int diameter = mass >= Space.EARTH_WEIGHT * 10000 ? 7 : 2;
+        int diameter = mass >= EARTH_WEIGHT * 10000 ? 7 : 2;
         int xtmp = (int) ((x - centrex) / scale + size.width / 2);
         int ytmp = (int) ((y - centrey) / scale + size.height / 2);
         graphics.fillOval(
