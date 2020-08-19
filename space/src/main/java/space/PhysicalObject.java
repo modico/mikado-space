@@ -121,24 +121,32 @@ public class PhysicalObject {
 
     public void paintPhysicalObject(Graphics2D graphics, double centrex, double scale, Dimension size, double centrey) {
         if (!Space.IS_BOUNCING_BALLS) {
-            graphics.setColor(weightToColor(mass));
-            int diameter = mass >= Space.EARTH_WEIGHT * 10000 ? 7 : 2;
-            int xtmp = (int) ((x - centrex) / scale + size.width / 2);
-            int ytmp = (int) ((y - centrey) / scale + size.height / 2);
-            graphics.fillOval(
-                    xtmp-diameter/2,
-                    ytmp-diameter/2,
-                    diameter,
-                    diameter);
+            paintBouncingBall(graphics, centrex, scale, size, centrey);
         } else { //BREAKOUT
-            graphics.setColor(Color.WHITE);
-            int xtmp = (int) ((x - centrex)  + size.width / 2);
-            int ytmp = (int) ((y - centrey)  + size.height / 2);
-            graphics.fillOval(
-                    (int) (xtmp - radius ),
-                    (int) (ytmp - radius ),
-                    (int) (2 * radius),
-                    (int) (2 * radius));
+            paintBreakeout(graphics, centrex, size, centrey);
         }
+    }
+
+    private void paintBreakeout(Graphics2D graphics, double centrex, Dimension size, double centrey) {
+        graphics.setColor(Color.WHITE);
+        int xtmp = (int) ((x - centrex)  + size.width / 2);
+        int ytmp = (int) ((y - centrey)  + size.height / 2);
+        graphics.fillOval(
+                (int) (xtmp - radius ),
+                (int) (ytmp - radius ),
+                (int) (2 * radius),
+                (int) (2 * radius));
+    }
+
+    private void paintBouncingBall(Graphics2D graphics, double centrex, double scale, Dimension size, double centrey) {
+        graphics.setColor(weightToColor(mass));
+        int diameter = mass >= Space.EARTH_WEIGHT * 10000 ? 7 : 2;
+        int xtmp = (int) ((x - centrex) / scale + size.width / 2);
+        int ytmp = (int) ((y - centrey) / scale + size.height / 2);
+        graphics.fillOval(
+                xtmp-diameter/2,
+                ytmp-diameter/2,
+                diameter,
+                diameter);
     }
 }
