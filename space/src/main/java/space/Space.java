@@ -55,7 +55,26 @@ public class Space extends JFrame implements MouseWheelListener,
                 graphics.clearRect(0, 0, getWidth(), getHeight());
             }
             for (PhysicalObject po : objects) {
-                po.paintPhysicalObject(graphics);
+                if (!IS_BOUNCING_BALLS) {
+                    graphics.setColor(weightToColor(po.mass));
+                    int diameter = po.mass >= EARTH_WEIGHT * 10000 ? 7 : 2;
+                    int xtmp = (int) ((po.x - centrex) / scale + frame.getSize().width / 2);
+                    int ytmp = (int) ((po.y - centrey) / scale + frame.getSize().height / 2);
+                    graphics.fillOval(
+                            xtmp-diameter/2,
+                            ytmp-diameter/2,
+                            diameter,
+                            diameter);
+                } else { //BREAKOUT
+                    graphics.setColor(Color.WHITE);
+                    int xtmp = (int) ((po.x - centrex)  + frame.getSize().width / 2);
+                    int ytmp = (int) ((po.y - centrey)  + frame.getSize().height / 2);
+                    graphics.fillOval(
+                            (int) (xtmp - po.radius ),
+                            (int) (ytmp - po.radius ),
+                            (int) (2 * po.radius),
+                            (int) (2 * po.radius));
+                }
                 String string = "Objects:" + objects.size() + " scale:" + scale + " steps:" + step + " frame rate: " + frameRate;
                 setTitle(string);
             }
