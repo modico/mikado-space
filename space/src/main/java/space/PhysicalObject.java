@@ -120,15 +120,7 @@ public class PhysicalObject {
                 + mass + ",radius=" + radius;
     }
 
-    public void paintPhysicalObject(Graphics2D graphics, double centrex, double scale, Dimension size, double centrey) {
-        if (!Space.IS_BOUNCING_BALLS) {
-            paintBouncingBall(graphics, centrex, scale, size, centrey);
-        } else { //BREAKOUT
-            paintBreakeout(graphics, centrex, size, centrey);
-        }
-    }
-
-    private void paintBreakeout(Graphics2D graphics, double centrex, Dimension size, double centrey) {
+    public void paintBreakeout(Graphics2D graphics, double centrex, Dimension size, double centrey) {
         graphics.setColor(Color.WHITE);
         int xtmp = (int) ((x - centrex)  + size.width / 2);
         int ytmp = (int) ((y - centrey)  + size.height / 2);
@@ -139,7 +131,7 @@ public class PhysicalObject {
                 (int) (2 * radius));
     }
 
-    private void paintBouncingBall(Graphics2D graphics, double centrex, double scale, Dimension size, double centrey) {
+    public void paintBouncingBall(Graphics2D graphics, double centrex, double scale, Dimension size, double centrey) {
         graphics.setColor(weightToColor(mass));
         int diameter = mass >= EARTH_WEIGHT * 10000 ? 7 : 2;
         int xtmp = (int) ((x - centrex) / scale + size.width / 2);

@@ -1,11 +1,7 @@
 package space;
 
 import javax.swing.JFrame;
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -53,7 +49,12 @@ public class Space extends JFrame implements MouseWheelListener,
                 graphics.clearRect(0, 0, getWidth(), getHeight());
             }
             for (PhysicalObject po : objects) {
-                po.paintPhysicalObject(graphics, centrex, scale, frame.getSize(), centrey);
+                Dimension size = frame.getSize();
+                if (!IS_BOUNCING_BALLS) {
+                    po.paintBouncingBall(graphics, centrex, scale, size, centrey);
+                } else { //BREAKOUT
+                    po.paintBreakeout(graphics, centrex, size, centrey);
+                }
                 String string = "Objects:" + objects.size() + " scale:" + scale + " steps:" + step + " frame rate: " + frameRate;
                 setTitle(string);
             }
