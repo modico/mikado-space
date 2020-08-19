@@ -25,6 +25,19 @@ public class PhysicalObject {
         this.radius = radius;
     }
 
+    public static Color weightToColor(double weight) {
+        if (weight < 1e10) return Color.GREEN;
+        if (weight < 1e12) return Color.CYAN;
+        if (weight < 1e14) return Color.MAGENTA;
+        if (weight < 1e16) return Color.BLUE;
+        if (weight < 1e18) return Color.GRAY;
+        if (weight < 1e20) return Color.RED;
+        if (weight < 1e22) return Color.ORANGE;
+        if (weight < 1e25) return Color.PINK;
+        if (weight < 1e28) return Color.YELLOW;
+        return Color.WHITE;
+    }
+
     public PhysicalObject absorb(PhysicalObject other) {
         double totalMass = mass + other.mass;
         x = (x * mass + other.x * other.mass) / totalMass;
@@ -109,7 +122,7 @@ public class PhysicalObject {
 
     public void paintPhysicalObject(Graphics2D graphics) {
         if (!Space.IS_BOUNCING_BALLS) {
-            graphics.setColor(Space.weightToColor(mass));
+            graphics.setColor(weightToColor(mass));
             int diameter = mass >= Space.EARTH_WEIGHT * 10000 ? 7 : 2;
             int xtmp = (int) ((x - Space.centrex) / Space.scale + Space.frame.getSize().width / 2);
             int ytmp = (int) ((y - Space.centrey) / Space.scale + Space.frame.getSize().height / 2);
