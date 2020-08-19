@@ -7,6 +7,7 @@ import static java.lang.Math.sqrt;
 
 public class PhysicalObject {
 
+    public static double seconds = 1;
     public double mass;
     public double x;
     public double y;
@@ -38,7 +39,7 @@ public class PhysicalObject {
         // find collision point by backstepping
 
         //backstep increment
-        final double s = -Space.seconds / 10;
+        final double s = -seconds / 10;
         //total backstep size to be found incrementally
         double dt = 0;
         //vector from this object to the other object
