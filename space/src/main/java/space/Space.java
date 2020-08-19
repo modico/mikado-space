@@ -28,7 +28,6 @@ public class Space extends JFrame implements MouseWheelListener,
     private static final long serialVersionUID = 1532817796535372081L;
 
     private static final double G = 6.67428e-11; // m3/kgs2
-    public static double seconds = 1;
     private static List<PhysicalObject> objects = new ArrayList<PhysicalObject>();
     static double centrex = 0.0;
     static double centrey = 0.0;
@@ -167,7 +166,7 @@ public class Space extends JFrame implements MouseWheelListener,
     }
 
     public void setStepSize(double seconds) {
-        Space.seconds = seconds;
+        PhysicalObject.seconds = seconds;
     }
 
     public static PhysicalObject add(double weightKilos, double x, double y,
@@ -195,15 +194,15 @@ public class Space extends JFrame implements MouseWheelListener,
                 }
                 double ax = fx / aff.mass;
                 double ay = fy / aff.mass;
-                aff.x = aff.x - ax * Math.pow(seconds, 2) / 2 + aff.vx * seconds;
-                aff.y = aff.y - ay * Math.pow(seconds, 2) / 2 + aff.vy * seconds;
-                aff.vx = aff.vx - ax * seconds;
-                aff.vy = aff.vy - ay * seconds;
+                aff.x = aff.x - ax * Math.pow(PhysicalObject.seconds, 2) / 2 + aff.vx * PhysicalObject.seconds;
+                aff.y = aff.y - ay * Math.pow(PhysicalObject.seconds, 2) / 2 + aff.vy * PhysicalObject.seconds;
+                aff.vx = aff.vx - ax * PhysicalObject.seconds;
+                aff.vy = aff.vy - ay * PhysicalObject.seconds;
             }
         } else {
             for (PhysicalObject physicalObject : objects) {
-                physicalObject.x = physicalObject.x + physicalObject.vx * seconds;
-                physicalObject.y = physicalObject.y + physicalObject.vy * seconds;
+                physicalObject.x = physicalObject.x + physicalObject.vx * PhysicalObject.seconds;
+                physicalObject.y = physicalObject.y + physicalObject.vy * PhysicalObject.seconds;
             }
 
         }
