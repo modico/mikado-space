@@ -1,17 +1,10 @@
 package space;
 
-import javax.swing.JFrame;
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import object.PhysicalObject;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -55,7 +48,20 @@ public class Space extends JFrame implements MouseWheelListener,
                 graphics.clearRect(0, 0, getWidth(), getHeight());
             }
             for (PhysicalObject po : objects) {
-                po.paintPhysicalObject(graphics);
+                if (IS_BOUNCING_BALLS) {
+                    po.paintPhysicalObject(graphics,
+                                            weightToColor(po.mass),
+                                            (int) ((po.x - centrex)  + frame.getSize().width / 2 - po.radius),
+                                            (int) ((po.y - centrey)  + frame.getSize().height / 2 - po.radius),
+                                            (int) (2 * po.radius));
+                } else {
+                    int diameter = po.mass >= Space.EARTH_WEIGHT * 10000 ? 7 : 2;
+                    po.paintPhysicalObject(graphics,
+                                            Color.WHITE,
+                                            (int) ((po.x - centrex) / scale + frame.getSize().width / 2) - diameter/2,
+                                            (int) ((po.y - centrey) / scale + frame.getSize().height / 2) - diameter/2,
+                                            diameter);
+                }
                 String string = "Objects:" + objects.size() + " scale:" + scale + " steps:" + step + " frame rate: " + frameRate;
                 setTitle(string);
             }
@@ -160,7 +166,13 @@ public class Space extends JFrame implements MouseWheelListener,
     }
 
     public void step() {
-        if (!IS_BOUNCING_BALLS) {
+        if (IS_BOUNCING_BALLS) {
+            for (PhysicalObject physicalObject : objects) {
+                physicalObject.x = physicalObject.x + physicalObject.vx * seconds;
+                physicalObject.y = physicalObject.y + physicalObject.vy * seconds;
+            }
+
+        } else {
             for (PhysicalObject aff : objects) {
                 double fx = 0;
                 double fy = 0;
@@ -181,12 +193,6 @@ public class Space extends JFrame implements MouseWheelListener,
                 aff.vx = aff.vx - ax * seconds;
                 aff.vy = aff.vy - ay * seconds;
             }
-        } else {
-            for (PhysicalObject physicalObject : objects) {
-                physicalObject.x = physicalObject.x + physicalObject.vx * seconds;
-                physicalObject.y = physicalObject.y + physicalObject.vy * seconds;
-            }
-
         }
         step++;
         paint(getGraphics());
@@ -210,7 +216,7 @@ public class Space extends JFrame implements MouseWheelListener,
                     double distance = Math.sqrt(Math.pow(one.x - other.x, 2) + Math.pow(one.y - other.y, 2));
                     double collsionDistance = one.radius + other.radius;
                     if (distance < collsionDistance) {
-                        one.hitBy(other);
+                        one.hitBy(other, -seconds / 10);
                     }
                 }
             }

@@ -27,10 +27,10 @@ the previous (working) state as the exercises are completed.
 Easy level
 ----------
 ##### Background
-The `space.PhysicalObject` is to be used in another project. However, the entire `Space` class must NOT be shared.
-Your task is to extract the `space.PhysicalObject` to a new project.
+The `object.PhysicalObject` is to be used in another project. However, the entire `Space` class must NOT be shared.
+Your task is to extract the `object.PhysicalObject` to a new project.
 ##### Goal
-Enable reuse of `space.PhysicalObject`
+Enable reuse of `object.PhysicalObject`
 
 
 Intermediate level

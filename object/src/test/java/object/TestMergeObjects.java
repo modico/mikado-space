@@ -1,4 +1,4 @@
-package space;
+package object;
 
 import org.junit.jupiter.api.Test;
 
@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestMergeObjects {
     @Test
-    public void mergeWithoutSpeed() throws Exception {
+    public void mergeWithoutSpeed() {
         PhysicalObject one = new PhysicalObject(1, 1, 0, 0, 0, 1);
         PhysicalObject other = new PhysicalObject(1, 0, 1, 0, 0, 1);
         PhysicalObject merge = one.absorb(other);
@@ -17,7 +17,7 @@ public class TestMergeObjects {
     }
 
     @Test
-    public void mergeWithSpeed() throws Exception {
+    public void mergeWithSpeed() {
         PhysicalObject one = new PhysicalObject(1, 1, 0, 1, 0, 1);
         PhysicalObject other = new PhysicalObject(1, 0, 1, 0, 1, 1);
         PhysicalObject merge = one.absorb(other);
@@ -29,7 +29,7 @@ public class TestMergeObjects {
     }
 
     @Test
-    public void mergeWithSpeedAndDifferentMasses() throws Exception {
+    public void mergeWithSpeedAndDifferentMasses() {
         PhysicalObject one = new PhysicalObject(1, 1, 1, 1, 0, 1);
         PhysicalObject other = new PhysicalObject(4, 0, 0, 0, 1, 1);
         PhysicalObject merge = one.absorb(other);
@@ -41,7 +41,7 @@ public class TestMergeObjects {
     }
 
     @Test
-    public void headsOnMergeConservesZeroSumMomentum() throws Exception {
+    public void headsOnMergeConservesZeroSumMomentum() {
         PhysicalObject one = new PhysicalObject(10, 0, 0, 100, 100, 1);
         PhysicalObject other = new PhysicalObject(100, 0, 0, -10, -10, 1);
         PhysicalObject merge = one.absorb(other);
@@ -53,7 +53,7 @@ public class TestMergeObjects {
     }
 
     @Test
-    public void headsOnMergeConservesMomentum() throws Exception {
+    public void headsOnMergeConservesMomentum() {
         PhysicalObject one = new PhysicalObject(10, 0, 0, 10, 10, 1);
         PhysicalObject other = new PhysicalObject(100, 0, 0, 0, 0, 1);
         PhysicalObject merge = one.absorb(other);

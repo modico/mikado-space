@@ -1,5 +1,6 @@
 package space;
 
+import object.PhysicalObject;
 import org.junit.jupiter.api.Test;
 
 import static java.lang.Math.sqrt;
@@ -13,7 +14,7 @@ public class TestBounce {
     public void straightOn() throws Exception {
         PhysicalObject one = new PhysicalObject(1, 0, 0, 0, 0, 1);
         PhysicalObject two = new PhysicalObject(1, -1, 0, 1, 0, 1);
-        one.hitBy(two);
+        one.hitBy(two, -Space.seconds / 10);
         assertEquals(1.0, one.vx, 0.0001);
         assertEquals(0.0, one.vy, 0.0001);
         assertEquals(0.0, two.vx, 0.0001);
@@ -26,7 +27,7 @@ public class TestBounce {
     public void straightOnVerticalDifferentMass() throws Exception {
         PhysicalObject one = new PhysicalObject(1, 0, 0, 0, -1, 0.5);
         PhysicalObject two = new PhysicalObject(2, 0, -1, 0, 1, 0.5);
-        one.hitBy(two);
+        one.hitBy(two, -Space.seconds / 10);
         assertEquals(5.0 / 3, one.vy, 0.0001);
         assertEquals(-1.0 / 3, two.vy, 0.0001);
     }
@@ -35,7 +36,7 @@ public class TestBounce {
     public void straightOnDifferentMass1() throws Exception {
         PhysicalObject one = new PhysicalObject(1, 0, 0, -1, 0, 0.5);
         PhysicalObject two = new PhysicalObject(2, -1, 0, 1, 0, 0.5);
-        one.hitBy(two);
+        one.hitBy(two, -Space.seconds / 10);
         assertEquals(5.0 / 3, one.vx, 0.0001);
         assertEquals(-1.0 / 3, two.vx, 0.0001);
     }
@@ -44,7 +45,7 @@ public class TestBounce {
     public void straightOnDifferentMass2() throws Exception {
         PhysicalObject one = new PhysicalObject(1, 0, 0, -1, 0, 0.5);
         PhysicalObject two = new PhysicalObject(2, -1, 0, 1, 0, 0.5);
-        one.hitBy(two);
+        one.hitBy(two, -Space.seconds / 10);
         assertEquals(-1.0 / 3, two.vx, 0.0001);
         assertEquals(0, two.vy, 0.0001);
     }
@@ -53,7 +54,7 @@ public class TestBounce {
     public void with90degImpactAngle() throws Exception {
         PhysicalObject one = new PhysicalObject(1, 1, 0, 0, 1, sqrt(0.5));
         PhysicalObject two = new PhysicalObject(1, 0, 1, 1, 0, sqrt(0.5));
-        one.hitBy(two);
+        one.hitBy(two, -Space.seconds / 10);
         assertEquals(1, one.vx, 0.0001);
         assertEquals(0, one.vy, 0.0001);
         assertEquals(0, two.vx, 0.0001);
@@ -64,7 +65,7 @@ public class TestBounce {
     public void with90degImpactAngleTurned() throws Exception {
         PhysicalObject one = new PhysicalObject(1, 0, 0, 1, 1, 0.5);
         PhysicalObject two = new PhysicalObject(1, 1, 0, -1, 1, 0.5);
-        one.hitBy(two);
+        one.hitBy(two, -Space.seconds / 10);
         assertEquals(-1, one.vx, 0.0001);
         assertEquals(1, one.vy, 0.0001);
         assertEquals(1, two.vx, 0.0001);
@@ -76,7 +77,7 @@ public class TestBounce {
     public void with45degImpactAngle() throws Exception {
         PhysicalObject one = new PhysicalObject(1, 0, 0, 0, 0, 0.5);
         PhysicalObject two = new PhysicalObject(1, -1, 1, 1, 0, 0.5);
-        one.hitBy(two);
+        one.hitBy(two, -Space.seconds / 10);
         assertEquals(0.5, one.vx, 0.0001);
         assertEquals(-0.5, one.vy, 0.0001);
         assertEquals(0.5, two.vx, 0.0001);
@@ -87,7 +88,7 @@ public class TestBounce {
     public void with45degImpactAngleFromBelow() throws Exception {
         PhysicalObject one = new PhysicalObject(1, 0, 0, 0, 0, 0.5);
         PhysicalObject two = new PhysicalObject(1, -1, 0, 1, 1, 0.5);
-        one.hitBy(two);
+        one.hitBy(two, -Space.seconds / 10);
         assertEquals(1, one.vx, 0.0001);
         assertEquals(0, one.vy, 0.0001);
         assertEquals(0, two.vx, 0.0001);

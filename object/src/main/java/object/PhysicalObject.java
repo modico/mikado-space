@@ -1,4 +1,4 @@
-package space;
+package object;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -34,11 +34,10 @@ public class PhysicalObject {
         return this;
     }
 
-    public void hitBy(PhysicalObject other) {
+    public void hitBy(PhysicalObject other, double backstepIncrement) {
         // find collision point by backstepping
 
         //backstep increment
-        final double s = -Space.seconds / 10;
         //total backstep size to be found incrementally
         double dt = 0;
         //vector from this object to the other object
@@ -47,9 +46,9 @@ public class PhysicalObject {
         double d = sqrt(new12[0] * new12[0] + new12[1] * new12[1]);
         // backstep to find collision point
         while (d < radius + other.radius) {
-            dt += s;
-            new12[0] = new12[0] + s * (vx - other.vx);
-            new12[1] = new12[1] + s * (vy - other.vy);
+            dt += backstepIncrement;
+            new12[0] = new12[0] + backstepIncrement * (vx - other.vx);
+            new12[1] = new12[1] + backstepIncrement * (vy - other.vy);
             d = sqrt(new12[0] * new12[0] + new12[1] * new12[1]);
         }
 
@@ -106,26 +105,8 @@ public class PhysicalObject {
                 + mass + ",radius=" + radius;
     }
 
-    public void paintPhysicalObject(Graphics2D graphics) {
-        if (!Space.IS_BOUNCING_BALLS) {
-            graphics.setColor(Space.weightToColor(mass));
-            int diameter = mass >= Space.EARTH_WEIGHT * 10000 ? 7 : 2;
-            int xtmp = (int) ((x - Space.centrex) / Space.scale + Space.frame.getSize().width / 2);
-            int ytmp = (int) ((y - Space.centrey) / Space.scale + Space.frame.getSize().height / 2);
-            graphics.fillOval(
-                    xtmp-diameter/2,
-                    ytmp-diameter/2,
-                    diameter,
-                    diameter);
-        } else { //BREAKOUT
-            graphics.setColor(Color.WHITE);
-            int xtmp = (int) ((x - Space.centrex)  + Space.frame.getSize().width / 2);
-            int ytmp = (int) ((y - Space.centrey)  + Space.frame.getSize().height / 2);
-            graphics.fillOval(
-                    (int) (xtmp - radius ),
-                    (int) (ytmp - radius ),
-                    (int) (2 * radius),
-                    (int) (2 * radius));
-        }
+    public void paintPhysicalObject(Graphics2D graphics, Color color, int xPosition, int yPosition, int diameter) {
+        graphics.setColor(color);
+        graphics.fillOval(xPosition, yPosition, diameter, diameter);
     }
 }
