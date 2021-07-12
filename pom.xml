@@ -8,6 +8,8 @@
     <modules>
         <module>space</module>
         <module>object</module>
+        <module>bouncingBalls</module>
+        <module>solarSystem</module>
     </modules>
 
     <properties>
