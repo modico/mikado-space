@@ -1,5 +1,6 @@
 package space;
 
+import object.Coordinates;
 import object.PhysicalObject;
 
 import javax.swing.*;
@@ -15,10 +16,10 @@ public abstract class Space extends JFrame implements MouseWheelListener,
 
     private static final long serialVersionUID = 1532817796535372081L;
 
-    public static double seconds = 1;
+    public static double iterationTimeInSeconds = 1;
     public static List<PhysicalObject> objects = new ArrayList<>();
-    static double centrex = 0.0;
-    static double centrey = 0.0;
+    static double centreX = 0.0;
+    static double centreY = 0.0;
     static double scale = 10;
     private static boolean showWake = false;
     public static int step = 0;
@@ -49,7 +50,9 @@ public abstract class Space extends JFrame implements MouseWheelListener,
         }
     }
 
-    public abstract void paintObject(Graphics2D graphics, PhysicalObject po);
+    public abstract void paintObject(Graphics2D graphics, PhysicalObject objectToPaint);
+
+    public abstract void setupSpaceParameters();
 
     public void runSpace() throws InterruptedException, InvocationTargetException {
 
@@ -57,13 +60,14 @@ public abstract class Space extends JFrame implements MouseWheelListener,
         this.addMouseMotionListener(this);
         this.addKeyListener(this);
         this.setSize(800, 820);
-        this.setupObjects(this);
+        this.setupSpaceParameters();
+        this.setupObjects();
         this.setVisible(true);
         while (true) {
             final long start = System.currentTimeMillis();
             EventQueue.invokeAndWait(() -> {
                 this.collide();
-                this.step();
+                this.moveObjects();
             });
             try {
                 long ahead = 1000 / frameRate - (System.currentTimeMillis() - start);
@@ -80,32 +84,32 @@ public abstract class Space extends JFrame implements MouseWheelListener,
         }
     }
 
-    public void setupObjects(Space space) {}
+    public void setupObjects() {}
 
     public static double randSquare() {
         double random = Math.random();
         return random * random;
     }
 
-    public void setStepSize(double seconds) {
-        Space.seconds = seconds;
+    public void setIterationTimeInSeconds(double seconds) {
+        Space.iterationTimeInSeconds = seconds;
     }
 
     public static PhysicalObject add(double weightKilos, double x, double y,
                                      double vx, double vy, double radius) {
-        PhysicalObject physicalObject = new PhysicalObject(weightKilos, x, y,
-                vx, vy, radius);
+        PhysicalObject physicalObject = new PhysicalObject(weightKilos,
+                new Coordinates(x, y, vx, vy), radius);
         objects.add(physicalObject);
         return physicalObject;
     }
 
-    public void step() {
-        stepForObjects();
+    public void moveObjects() {
+        setCoordinatesOfObjects();
         step++;
         paint(getGraphics());
     }
 
-    public abstract void stepForObjects();
+    public abstract void setCoordinatesOfObjects();
 
     private void collide() {
         List<PhysicalObject> remove = new ArrayList<>();
@@ -127,6 +131,10 @@ public abstract class Space extends JFrame implements MouseWheelListener,
 
     public abstract void handleCollision(List<PhysicalObject> remove, PhysicalObject one, PhysicalObject other);
 
+    public boolean isCollision(PhysicalObject one, PhysicalObject other, double limit) {
+        return Math.sqrt(Math.pow(one.getXPosition() - other.getXPosition(), 2) + Math.pow(one.getYPosition() - other.getYPosition(), 2)) < limit;
+    }
+
     public void mouseWheelMoved(final MouseWheelEvent e) {
         scale = scale + scale * (Math.min(9, e.getWheelRotation())) / 10 + 0.0001;
         getGraphics().clearRect(0, 0, getWidth(), getHeight());
@@ -138,8 +146,8 @@ public abstract class Space extends JFrame implements MouseWheelListener,
         if (lastDrag == null) {
             lastDrag = e.getPoint();
         }
-        centrex = centrex - ((e.getX() - lastDrag.x) * scale);
-        centrey = centrey - ((e.getY() - lastDrag.y) * scale);
+        centreX = centreX - ((e.getX() - lastDrag.x) * scale);
+        centreY = centreY - ((e.getY() - lastDrag.y) * scale);
         lastDrag = e.getPoint();
         getGraphics().clearRect(0, 0, getWidth(), getHeight());
     }

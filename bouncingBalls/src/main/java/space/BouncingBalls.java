@@ -12,26 +12,21 @@ public class BouncingBalls extends Space {
     private static final boolean IS_BREAKOUT = false;
 
     @Override
-    public void setupObjects(Space space) {
+    public void setupObjects() {
         nrOfObjects = 50;
-        space.setStepSize(1); // One second per iteration
         for (int i = 0; i < nrOfObjects; i++) {
             // radius,weight in [1,20]
             double radiusAndWeight = 1 + 19 * Math.random();
             //x,y in [max radius, width or height - max radius]
-            Space.add(radiusAndWeight, 20 + 760 * Math.random(), 20 + 760 * Math.random(), 3 - 6 * Math.random(), 3 - 6 * Math.random(), radiusAndWeight);
+            add(radiusAndWeight, 20 + 760 * Math.random(), 20 + 760 * Math.random(), 3 - 6 * Math.random(), 3 - 6 * Math.random(), radiusAndWeight);
         }
-        scale = 1;
-        centrex = 400;
-        centrey = 390; //Must compensate for title bar
+
     }
 
     @Override
     public void handleCollision(List<PhysicalObject> remove, PhysicalObject one, PhysicalObject other) {
-        double distance = Math.sqrt(Math.pow(one.x - other.x, 2) + Math.pow(one.y - other.y, 2));
-        double collsionDistance = one.radius + other.radius;
-        if (distance < collsionDistance) {
-            one.hitBy(other, -seconds / 10);
+        if (isCollision(one,other,one.getRadius() + other.getRadius())) {
+            one.hitBy(other, -iterationTimeInSeconds / 10);
         }
     }
 
@@ -43,37 +38,45 @@ public class BouncingBalls extends Space {
 
     @Override
     public void reverseSpeedWhenWallCollision(List<PhysicalObject> remove, PhysicalObject one) {
-        if (one.x - one.radius < 0) {
-            one.vx = -one.vx;
+        if (one.getXPosition() - one.getRadius() < 0) {
+            one.setXVelocity(-one.getXVelocity());
         }
-        if (one.x + one.radius > 800) {
-            one.vx = -one.vx;
+        if (one.getXPosition() + one.getRadius() > 800) {
+            one.setXVelocity(-one.getXVelocity());
         }
-        if (one.y - one.radius < 0) {
-            one.vy = -one.vy;
+        if (one.getYPosition() - one.getRadius() < 0) {
+            one.setYVelocity(-one.getYVelocity());
         }
-        if (one.y + one.radius > 800 && !IS_BREAKOUT) {
-            one.vy = -one.vy;
-        } else if (one.y - one.radius > 800) {
+        if (one.getYPosition() + one.getRadius() > 800 && !IS_BREAKOUT) {
+            one.setYVelocity(-one.getYVelocity());
+        } else if (one.getYPosition() - one.getRadius() > 800) {
             remove.add(one);
         }
     }
 
     @Override
-    public void stepForObjects() {
+    public void setCoordinatesOfObjects() {
         for (PhysicalObject physicalObject : objects) {
-            physicalObject.x = physicalObject.x + physicalObject.vx * seconds;
-            physicalObject.y = physicalObject.y + physicalObject.vy * seconds;
+            physicalObject.setXPosition(physicalObject.getXPosition() + physicalObject.getXVelocity() * iterationTimeInSeconds);
+            physicalObject.setYPosition(physicalObject.getYPosition() + physicalObject.getYVelocity() * iterationTimeInSeconds);
         }
     }
 
     @Override
-    public void paintObject(Graphics2D graphics, PhysicalObject po) {
-        po.paintPhysicalObject(graphics,
-                weightToColor(po.mass),
-                (int) ((po.x - centrex)  + frame.getSize().width / 2 - po.radius),
-                (int) ((po.y - centrey)  + frame.getSize().height / 2 - po.radius),
-                (int) (2 * po.radius));
+    public void paintObject(Graphics2D graphics, PhysicalObject objectToPaint) {
+        objectToPaint.paintPhysicalObject(graphics,
+                weightToColor(objectToPaint.getMass()),
+                (int) ((objectToPaint.getXPosition() - centreX)  + frame.getSize().width / 2 - objectToPaint.getRadius()),
+                (int) ((objectToPaint.getYPosition() - centreY)  + frame.getSize().height / 2 - objectToPaint.getRadius()),
+                (int) (2 * objectToPaint.getRadius()));
+    }
+
+    @Override
+    public void setupSpaceParameters() {
+        setIterationTimeInSeconds(1); // One second per iteration
+        scale = 1;
+        centreX = 400;
+        centreY = 390; //Must compensate for title bar
     }
 
     private static Color weightToColor(double weight) {
